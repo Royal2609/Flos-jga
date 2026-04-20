@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JGA Flo · Breslau · 29.–31. Mai 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  :root{
+    --bg:#f5f1e8;
+    --bg-paper:#fdfbf4;
+    --ink:#1a1613;
+    --ink-soft:#4a403a;
+    --ink-muted:#7a6e64;
+    --accent:#b8472a;
+    --accent-dark:#8a3520;
+    --beer:#d89b3a;
+    --stamp:#a03020;
+    --line:#2a201b;
+    --paper-line:rgba(26,22,19,.15);
+    --highlight:#ffe89a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter Tight',sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(184,71,42,.05), transparent 50%),
+      radial-gradient(circle at 80% 90%, rgba(216,155,58,.07), transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    min-height:100vh;padding:32px 20px 80px;
+  }
+  .paper{
+    max-width:960px;margin:0 auto;background:var(--bg-paper);
+    border:1px solid var(--line);
+    box-shadow: 8px 8px 0 var(--line), 0 20px 60px rgba(0,0,0,.12);
+    padding:56px 52px;position:relative;
+  }
+  .paper::before{content:"";position:absolute;inset:8px;border:1px solid var(--paper-line);pointer-events:none}
+
+  /* HEADER */
+  .header{position:relative;padding-bottom:28px;border-bottom:2px solid var(--line);margin-bottom:36px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--accent);opacity:.4}
+  h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(42px,7vw,82px);line-height:.92;letter-spacing:-.03em;color:var(--ink)}
+  h1 em{font-style:italic;color:var(--accent);font-weight:500}
+  .subtitle{
+    display:flex;flex-wrap:wrap;gap:20px 36px;margin-top:22px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.12em;
+    color:var(--ink-soft);
+  }
+  .subtitle span strong{color:var(--ink);font-weight:700}
+
+  /* INTRO */
+  .intro{margin-bottom:44px}
+  .intro-text{font-family:'Fraunces',serif;font-size:18px;line-height:1.6;color:var(--ink-soft)}
+  .intro-text strong{color:var(--ink)}
+  .intro-text + .intro-text{margin-top:14px}
+
+  /* KEY FACTS */
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:28px}
+  .fact{background:white;border:1px solid var(--line);padding:16px 18px;position:relative;box-shadow:3px 3px 0 var(--line)}
+  .fact-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px}
+  .fact-value{font-family:'Fraunces',serif;font-size:17px;font-weight:500;color:var(--ink);line-height:1.3}
+  .fact-sub{font-size:12px;color:var(--ink-muted);margin-top:4px;font-family:'JetBrains Mono',monospace}
+  .fact a{color:var(--accent-dark);text-decoration:underline;text-underline-offset:2px}
+
+  .alert{background:var(--highlight);border-left:4px solid var(--accent);padding:16px 20px;font-size:14px;margin-top:24px}
+  .alert-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--accent-dark);margin-bottom:6px}
+
+  /* DAY SECTION */
+  .day{margin-bottom:52px}
+  .day-header{display:flex;align-items:baseline;gap:20px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+  .day-number{font-family:'Fraunces',serif;font-weight:900;font-size:64px;line-height:.9;color:var(--accent);font-style:italic}
+  .day-title{font-family:'Fraunces',serif;font-weight:500;font-style:italic;font-size:28px;color:var(--ink);line-height:1.1}
+  .day-date{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-muted);margin-left:auto}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:42px}
+  .timeline::before{content:"";position:absolute;left:14px;top:6px;bottom:6px;width:2px;background:var(--line);opacity:.25}
+  .slot{position:relative;margin-bottom:24px;page-break-inside:avoid;break-inside:avoid}
+  .slot::before{content:"";position:absolute;left:-34px;top:6px;width:18px;height:18px;border-radius:50%;background:var(--bg-paper);border:3px solid var(--accent);box-shadow:0 0 0 3px var(--bg-paper)}
+  .slot.milestone::before{background:var(--accent)}
+  .slot-time{display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:12px;background:var(--ink);color:var(--bg-paper);padding:3px 9px;letter-spacing:.06em;margin-bottom:8px}
+  .slot-name{font-family:'Fraunces',serif;font-weight:700;font-size:21px;color:var(--ink);margin-bottom:6px;line-height:1.25}
+  .slot-name a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--accent);padding-bottom:1px;transition:color .2s}
+  .slot-name a:hover{color:var(--accent)}
+  .slot-name a::after{content:" ↗";font-family:'Inter Tight',sans-serif;font-size:14px;color:var(--accent);font-weight:400;vertical-align:super}
+  .slot-body{font-size:14.5px;color:var(--ink-soft);line-height:1.55}
+  .slot-body strong{color:var(--ink)}
+  .slot-body a{color:var(--accent-dark);text-decoration:underline;text-underline-offset:2px}
+  .slot-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-muted);letter-spacing:.05em;margin-top:6px;display:flex;gap:14px;flex-wrap:wrap}
+  .slot-meta .tag{background:rgba(184,71,42,.1);color:var(--accent-dark);padding:2px 8px}
+
+  .chill-box{border:2px solid var(--line);background:white;padding:22px 24px;position:relative;margin-top:10px}
+  .chill-box::before{content:"♟ BILLARD · BEERPONG · DARTS";position:absolute;top:-10px;left:20px;background:var(--bg-paper);padding:0 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;font-weight:700;color:var(--accent)}
+  .chill-box p{font-size:14px;color:var(--ink-soft);margin-bottom:8px}
+  .chill-box ul{margin:8px 0 0 20px;font-size:13.5px;color:var(--ink-soft)}
+  .chill-box li{margin-bottom:4px}
+  .chill-box .ask{background:var(--highlight);display:inline-block;padding:2px 8px;font-weight:700}
+
+  /* MAP */
+  .map-section{margin-top:48px;margin-bottom:48px}
+  .map-wrap{border:1px solid var(--line);background:white;padding:0;overflow:hidden;box-shadow:4px 4px 0 var(--line)}
+  #map{width:100%;height:520px;z-index:0;background:#e8e2d4}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 18px;margin-top:16px;font-size:12.5px;font-family:'JetBrains Mono',monospace}
+  .legend-item{display:flex;gap:10px;align-items:flex-start}
+  .legend-dot{display:inline-block;min-width:24px;height:24px;border-radius:50%;background:var(--accent);color:white;font-size:11px;font-weight:700;text-align:center;line-height:24px;flex-shrink:0}
+  .legend-dot.home{background:var(--ink)}
+  .legend-dot.station{background:#555;font-size:13px}
+
+  /* COSTS */
+  .costs{margin-top:44px;background:var(--ink);color:var(--bg-paper);padding:36px 40px;position:relative}
+  .costs h2{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:30px;margin-bottom:8px;color:var(--beer)}
+  .costs-sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,241,232,.6);margin-bottom:24px}
+
+  .cost-category{margin-bottom:22px}
+  .cost-category-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--beer);margin-bottom:10px;font-weight:700;border-bottom:1px solid rgba(216,155,58,.3);padding-bottom:6px}
+  .cost-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:7px 0;font-size:14px;border-bottom:1px dashed rgba(245,241,232,.12)}
+  .cost-row .label{color:rgba(245,241,232,.88)}
+  .cost-row .hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(245,241,232,.5);margin-left:8px}
+  .cost-row .val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--bg-paper);white-space:nowrap}
+
+  .cost-total-box{margin-top:28px;padding:22px 24px;background:rgba(216,155,58,.1);border:2px solid var(--beer);display:flex;justify-content:space-between;align-items:baseline}
+  .cost-total-box .lbl{font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--beer)}
+  .cost-total-box .amt{font-family:'Fraunces',serif;font-weight:900;font-size:42px;color:var(--bg-paper);line-height:1}
+  .cost-footnote{font-size:12px;color:rgba(245,241,232,.65);margin-top:14px;font-style:italic;line-height:1.5}
+  .cost-footnote strong{color:var(--beer);font-style:normal}
+
+  /* FOOTER */
+  .footer{margin-top:48px;padding-top:20px;border-top:2px solid var(--line);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-muted)}
+
+  /* RESPONSIVE */
+  @media (max-width:720px){
+    .paper{padding:36px 22px}
+    .timeline{padding-left:30px}
+    .slot::before{left:-24px;width:14px;height:14px;border-width:2px}
+    .timeline::before{left:8px}
+    .costs{padding:28px 22px}
+    .cost-total-box{flex-direction:column;gap:10px;align-items:flex-start}
+    .cost-total-box .amt{font-size:34px}
+    h1{font-size:clamp(36px,10vw,58px)}
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="eyebrow">Wrocław · Breslau · Polska</div>
+    <h1>JGA <em>Flo</em><br>Breslau</h1>
+    <div class="subtitle">
+      <span><strong>29.–31. Mai 2026</strong></span>
+      <span>14 Männer · 3 Tage</span>
+      <span>Anreise aus Dresden</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <p class="intro-text">
+      Jungs — hier ist der <strong>aktuelle Planungsstand</strong> für Flos JGA in Breslau. Drei Tage mit Zug, polnischer Küche, Gokart-Rennen, Brauerei-Führung, Steakhouse und einem gemütlichen Abend in der Unterkunft mit Billard, Beerpong &amp; Co.
+    </p>
+    <p class="intro-text">
+      <strong>Feedback ist sehr willkommen</strong> — schreibt mir einfach, was ihr anders haben wollt oder wo ihr Ergänzungen habt. Klar ist aber: Bei <strong>14 Leuten werden wir nie alle Meinungen zu 100 % unter einen Hut bringen</strong> — denkt also bitte daran, dass wir irgendwo einen Kompromiss finden müssen. 😉
+    </p>
+    <p class="intro-text">
+      Das Wochenende fällt übrigens mit <strong>Juwenalia</strong> zusammen, dem großen Studentenfestival der Stadt — die Stimmung wird also ohnehin krass. Restaurants und Aktivitäten sollten wir trotzdem (oder gerade deswegen) rechtzeitig reservieren.
+    </p>
+
+    <div class="facts">
+      <div class="fact">
+        <div class="fact-label">🚆 Hinfahrt</div>
+        <div class="fact-value">Fr 29.05. · 14:23 Uhr</div>
+        <div class="fact-sub">Dresden Hbf Gl. 10 → Wrocław Gł. 18:27</div>
+        <div class="fact-sub"><a href="https://www.bahn.de/buchung/start?vbid=a4e57b0b-7a94-4104-9182-deeefccb1a4e" target="_blank" rel="noopener">DB-Verbindung ansehen ↗</a></div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">🚆 Rückfahrt</div>
+        <div class="fact-value">So 31.05. · 14:37 Uhr</div>
+        <div class="fact-sub">Wrocław Gł. → Dresden Hbf 18:33, Gl. 10</div>
+        <div class="fact-sub"><a href="https://www.bahn.de/buchung/start?vbid=35187504-a3df-4a59-8680-35656da0e259" target="_blank" rel="noopener">DB-Verbindung ansehen ↗</a></div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">🏠 Unterkunft</div>
+        <div class="fact-value">Airbnb · Brochów</div>
+        <div class="fact-sub">Terenowa 22, 52-231 Wrocław</div>
+        <div class="fact-sub"><a href="https://www.airbnb.de/rooms/1608601564567981993" target="_blank" rel="noopener">Airbnb-Listing öffnen ↗</a></div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">🚐 Transporter-Crew</div>
+        <div class="fact-value">Martin + 1</div>
+        <div class="fact-sub">Fahren parallel mit allem Gepäck und Einkäufen direkt in die Unterkunft</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <div class="alert-title">🎩 Flo zahlt nix</div>
+      Flos kompletten Anteil teilen sich <strong>Martin und ich</strong> — für alle anderen ist in der Kostenaufschlüsselung unten nur der eigene Anteil drin.
+    </div>
+  </section>
+
+  <!-- === TAG 1 === -->
+  <section class="day">
+    <div class="day-header">
+      <div class="day-number">01</div>
+      <div class="day-title">Freitag<br>Anreise &amp; Einstieg</div>
+      <div class="day-date">29.05.2026</div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="slot milestone">
+        <span class="slot-time">13:00</span>
+        <div class="slot-name">Treffen bei Flo in Dresden 🎉</div>
+        <div class="slot-body">
+          Alle treffen sich bei Flo, holen ihn ab und es geht gemeinsam zum Hbf Dresden. <strong>Martin + 1</strong> übernehmen parallel den Transporter-Run: Gepäck, Einkauf (Frühstück, Getränke, Beerpong-Equipment?) — und bringen alles direkt in die Unterkunft.
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">14:23</span>
+        <div class="slot-name">🚆 Zug Dresden Hbf → Wrocław Główny</div>
+        <div class="slot-body">
+          Abfahrt <strong>14:23 Uhr ab Gleis 10</strong> mit RE 5683 + KD 69526, Ankunft in Breslau <strong>18:27 Uhr</strong>. Fahrtzeit ~4 h. Zeit für erste Anreisebiere, Warm-up-Spiele, JGA-Aufgaben für Flo.
+          <div class="slot-meta">
+            <span class="tag">mit D-Ticket: ~70 € p.P.</span>
+            <span class="tag">ohne D-Ticket: ~100 € p.P.</span>
+            <span>Hin + Rück</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">18:30</span>
+        <div class="slot-name">🍲 Abendessen · <a href="https://www.facebook.com/KurnaChataWroclaw/" target="_blank" rel="noopener">Kurna Chata</a></div>
+        <div class="slot-body">
+          Direkt vom Bahnhof in die Altstadt. Rustikal-polnische Küche: <strong>Pierogi, Gulasch im Brotlaib, Wurst, Bier</strong> — perfekter Einstieg ins Wochenende.
+          <div class="slot-meta">
+            <span class="tag">~25 € p.P.</span>
+            <span>Odrzańska 24/7</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">21:30</span>
+        <div class="slot-name">🍻 Bar · <a href="https://www.pwip.com.pl/" target="_blank" rel="noopener">Pijalnia Wódki i Piwa</a></div>
+        <div class="slot-body">
+          Lockere, klassisch polnische Bar — günstige Shots &amp; Bier, offen bis 4 Uhr. Stimmung ist garantiert (Juwenalia!). Wer noch mehr Action will: weiter in einen Club in der Nähe (Ruska 51 / Rynek).
+          <div class="slot-meta">
+            <span class="tag">je nach Durst 😉</span>
+            <span>Ruska 58/59</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">nachts</span>
+        <div class="slot-name">🚕 Rückfahrt zur Unterkunft</div>
+        <div class="slot-body">
+          Mit Bolt/Uber (3–4 Autos) oder Nachtbus 245/247. 15–20 Minuten Fahrt nach Brochów.
+          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === TAG 2 === -->
+  <section class="day">
+    <div class="day-header">
+      <div class="day-number">02</div>
+      <div class="day-title">Samstag<br>Gokart · Bier · Steak</div>
+      <div class="day-date">30.05.2026</div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="slot">
+        <span class="slot-time">09:30</span>
+        <div class="slot-name">🍳 Frühstück in der Unterkunft</div>
+        <div class="slot-body">
+          Gemütlich starten — <strong>Rührei, Brötchen, Nutella, Wurst, Käse</strong>. Einkäufe hat der Transporter mitgebracht.
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">11:30</span>
+        <div class="slot-name">🚕 Fahrt in die Innenstadt</div>
+        <div class="slot-body">
+          Mit Bolt/Uber in 3–4 Autos direkt zur Kartbahn im Einkaufszentrum Wroclavia.
+          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">12:30</span>
+        <div class="slot-name">🏁 Event 1 · Gokart · <a href="https://gokartywroclaw.pl/" target="_blank" rel="noopener">Pitlane Wroclavia</a></div>
+        <div class="slot-body">
+          <strong>Format für 14 Fahrer:</strong><br>
+          ▸ 2× Qualifying (je 7 Personen)<br>
+          ▸ Die 7 schnellsten fahren das <strong>A-Finale</strong><br>
+          ▸ Die 7 langsamsten fahren das <strong>B-Finale</strong><br>
+          ▸ Abschluss mit <strong>Siegerehrung</strong> 🏆 + Foto für die Ewigkeit
+          <div class="slot-meta">
+            <span class="tag">~40 € p.P.</span>
+            <span>Sucha 1, Poziom -2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">15:30</span>
+        <div class="slot-name">🍺 Event 2 · Biertasting / Brauereiführung · <a href="https://browarstumostow.pl/" target="_blank" rel="noopener">Browar Stu Mostów</a></div>
+        <div class="slot-body">
+          Eine der bekanntesten Craft-Brauereien Polens. <strong>Geführte Verkostung im Taproom</strong> — Biere mit Guide erklärt, dazu Snacks. Kurze Taxi-/ÖPNV-Fahrt vom Wroclavia nach Nadodrze.
+          <div class="slot-meta">
+            <span class="tag">~25 € p.P.</span>
+            <span>Jana Długosza 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">19:30</span>
+        <div class="slot-name">🥩 Abendessen · <a href="http://www.whiskeyinthejar.pl/" target="_blank" rel="noopener">Whiskey in the Jar</a></div>
+        <div class="slot-body">
+          Geiles Steakhouse direkt am Rynek. <strong>Lavastein-Steaks, Ribs, Burger</strong>, riesige Portionen. 4,5★ mit 13.000+ Bewertungen — da gibt&apos;s für Flo ordentlich was auf den Teller.
+          <div class="slot-meta">
+            <span class="tag">~35 € p.P.</span>
+            <span>Rynek 23-24</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">22:30</span>
+        <div class="slot-name">🚕 Zurück zur Unterkunft</div>
+        <div class="slot-body">
+          Mit Bolt/Uber in 3–4 Autos. Auf dem Weg ggf. noch kurz beim Żabka stoppen für Nachschub.
+          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">ab 23:00</span>
+        <div class="slot-name">🎱 Geiler Abend in der Unterkunft</div>
+        <div class="chill-box">
+          <p>Das Finale des Abends bei uns in Brochów:</p>
+          <ul>
+            <li><strong>Billard</strong> — Turnier-Modus, K.O.-System?</li>
+            <li><strong>Beerpong</strong> 🍻 — <span class="ask">Hat jemand Equipment (Tisch/Becher/Bälle)? Bitte melden!</span></li>
+            <li><strong>Darts</strong> 🎯 — 501, Cricket, was ihr wollt</li>
+            <li>Snacks + Bier + Wodka vom Einkauf</li>
+            <li>JGA-Aufgaben für Flo 🎩</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === TAG 3 === -->
+  <section class="day">
+    <div class="day-header">
+      <div class="day-number">03</div>
+      <div class="day-title">Sonntag<br>Ausklang &amp; Heimreise</div>
+      <div class="day-date">31.05.2026</div>
+    </div>
+
+    <div class="timeline">
+
+      <div class="slot">
+        <span class="slot-time">10:00</span>
+        <div class="slot-name">🍳 Katerfrühstück in der Unterkunft</div>
+        <div class="slot-body">
+          Rührei, Brötchen, Nutella, Wurst, Käse — dieselbe Nummer wie Samstag, nur mit mehr Kopfschmerzen.
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">11:30</span>
+        <div class="slot-name">🧳 Zusammenpacken &amp; Check-out</div>
+        <div class="slot-body">
+          Küche aufräumen, Müll raus, Schlüssel an den richtigen Ort. Martin + 1 übernehmen wieder den Transporter mit dem ganzen Gepäck.
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">12:30</span>
+        <div class="slot-name">🚕 Fahrt in die Innenstadt</div>
+        <div class="slot-body">
+          Mit Bolt/Uber oder Öffis. Rucksäcke mit in den Zug, großes Gepäck im Transporter.
+          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">13:00</span>
+        <div class="slot-name">🚶‍♂️ Kleine Stadtwanderung <em>(optional)</em></div>
+        <div class="slot-body">
+          Je nach Zustand der Truppe: kurze Runde über den <strong>Rynek</strong>, die Zwerge suchen (Kult in Breslau!), noch ein Kaffee am Marktplatz — oder gleich zum Bahnhof.
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">14:37</span>
+        <div class="slot-name">🚆 Rückfahrt Wrocław Gł. → Dresden Hbf</div>
+        <div class="slot-body">
+          Abfahrt <strong>14:37 Uhr</strong> mit KD 69571 + 20852, Ankunft in Dresden <strong>18:33 Uhr, Gleis 10</strong>. Flo heil und glücklich wieder abliefern. 🎩
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === KARTE === -->
+  <section class="map-section">
+    <div class="day-header">
+      <div class="day-number">◎</div>
+      <div class="day-title">Karte<br>Alle Stationen</div>
+      <div class="day-date">Interaktiv</div>
+    </div>
+    <div class="map-wrap">
+      <div id="map"></div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot home">⌂</span><div><strong>Unterkunft</strong><br>Terenowa 22 (Brochów)</div></div>
+      <div class="legend-item"><span class="legend-dot station">🚆</span><div><strong>Wrocław Główny</strong><br>Hauptbahnhof</div></div>
+      <div class="legend-item"><span class="legend-dot">1</span><div><strong>Kurna Chata</strong><br>Fr 18:30 · Abendessen</div></div>
+      <div class="legend-item"><span class="legend-dot">2</span><div><strong>Pijalnia Wódki i Piwa</strong><br>Fr 21:30 · Bar</div></div>
+      <div class="legend-item"><span class="legend-dot">3</span><div><strong>Pitlane Gokarty</strong><br>Sa 12:30 · Gokart</div></div>
+      <div class="legend-item"><span class="legend-dot">4</span><div><strong>Browar Stu Mostów</strong><br>Sa 15:30 · Brauerei</div></div>
+      <div class="legend-item"><span class="legend-dot">5</span><div><strong>Whiskey in the Jar</strong><br>Sa 19:30 · Steak</div></div>
+    </div>
+  </section>
+
+  <!-- === KOSTEN === -->
+  <section class="costs">
+    <h2>Kosten-Aufschlüsselung</h2>
+    <div class="costs-sub">pro Person · ungefähr · ohne Getränkekonsum in Bars/Clubs</div>
+
+    <div class="cost-category">
+      <div class="cost-category-title">🚆 Anreise &amp; Transport</div>
+      <div class="cost-row"><span class="label">Zug Dresden ⇄ Breslau <span class="hint">(mit D-Ticket)</span></span><span class="val">~70 €</span></div>
+      <div class="cost-row"><span class="label">Zug Dresden ⇄ Breslau <span class="hint">(ohne D-Ticket)</span></span><span class="val">~100 €</span></div>
+      <div class="cost-row"><span class="label">Bolt/Uber &amp; ÖPNV in Breslau <span class="hint">(6× ~3 €)</span></span><span class="val">~18 €</span></div>
+    </div>
+
+    <div class="cost-category">
+      <div class="cost-category-title">🏠 Unterkunft</div>
+      <div class="cost-row"><span class="label">Airbnb (2 Nächte, anteilig)</span><span class="val">~120 €</span></div>
+    </div>
+
+    <div class="cost-category">
+      <div class="cost-category-title">🏁 Aktivitäten</div>
+      <div class="cost-row"><span class="label">Gokart Pitlane Wroclavia <span class="hint">(Quali + Finale + Siegerehrung)</span></span><span class="val">~40 €</span></div>
+      <div class="cost-row"><span class="label">Browar Stu Mostów <span class="hint">(Führung + Tasting)</span></span><span class="val">~25 €</span></div>
+    </div>
+
+    <div class="cost-category">
+      <div class="cost-category-title">🍽 Essen auswärts</div>
+      <div class="cost-row"><span class="label">Fr · Abendessen Kurna Chata</span><span class="val">~25 €</span></div>
+      <div class="cost-row"><span class="label">Sa · Abendessen Whiskey in the Jar</span><span class="val">~35 €</span></div>
+    </div>
+
+    <div class="cost-category">
+      <div class="cost-category-title">🛒 Frühstück, Anreisebier, Samstagabend (umgelegt)</div>
+      <div class="cost-row"><span class="label">Einkauf: Frühstück Sa + So, Anreisebier, Snacks, Getränke für Sa-Abend</span><span class="val">~50 €</span></div>
+    </div>
+
+    <div class="cost-total-box">
+      <div class="lbl">Gesamt pro Person<br><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:rgba(216,155,58,.8);font-style:normal">MIT D-TICKET</span></div>
+      <div class="amt">~383 €</div>
+    </div>
+    <div class="cost-total-box" style="margin-top:10px">
+      <div class="lbl">Gesamt pro Person<br><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:rgba(216,155,58,.8);font-style:normal">OHNE D-TICKET</span></div>
+      <div class="amt">~413 €</div>
+    </div>
+
+    <p class="cost-footnote">
+      <strong>Hinweis:</strong> Flos kompletter Anteil wird von Martin und mir übernommen — jeder andere zahlt nur seinen eigenen Anteil wie oben aufgelistet. Nicht enthalten: Getränke in der Pijalnia und in Clubs (je nach Durst 😉), spontane Zusatzausgaben, Taxi-Ausflüge. Kleinen Puffer von ~30–50 € einplanen.
+    </p>
+  </section>
+
+  <footer class="footer">
+    <span>JGA Flo · Breslau · Planungsstand April 2026</span>
+    <span>Feedback willkommen ✉</span>
+  </footer>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  function initMap(){
+    if (typeof L === 'undefined') {
+      console.error('Leaflet nicht geladen');
+      document.getElementById('map').innerHTML =
+        '<div style="padding:40px;text-align:center;font-family:sans-serif;color:#666">Karte konnte nicht geladen werden (evtl. kein Internet?).</div>';
+      return;
+    }
+
+    const home = [51.0735, 17.0395];
+    const station = [51.0989, 17.0365];
+    const stops = [
+      {n:1, name:"Kurna Chata",          when:"Fr 18:30 · Abendessen",   coord:[51.112649, 17.031294]},
+      {n:2, name:"Pijalnia Wódki i Piwa",when:"Fr 21:30 · Bar",          coord:[51.110054, 17.027324]},
+      {n:3, name:"Pitlane Gokarty",      when:"Sa 12:30 · Gokart",       coord:[51.096448, 17.034837]},
+      {n:4, name:"Browar Stu Mostów",    when:"Sa 15:30 · Brauerei",     coord:[51.131777, 17.059272]},
+      {n:5, name:"Whiskey in the Jar",   when:"Sa 19:30 · Steak",        coord:[51.109210, 17.032128]},
+    ];
+
+    const map = L.map('map', {scrollWheelZoom:false}).setView([51.095, 17.035], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    function makeIcon(label, kind){
+      const bg = kind==='home' ? '#1a1613' : kind==='station' ? '#555' : '#b8472a';
+      const size = kind==='home' ? 16 : kind==='station' ? 15 : 14;
+      return L.divIcon({
+        className:'jga-icon',
+        html:'<div style="width:34px;height:34px;border-radius:50%;background:'+bg+
+             ';color:#fdfbf4;border:3px solid #fdfbf4;box-shadow:0 2px 8px rgba(0,0,0,.35);'+
+             'display:flex;align-items:center;justify-content:center;'+
+             'font-family:\'JetBrains Mono\',monospace;font-weight:700;font-size:'+size+'px;">'+
+             label+'</div>',
+        iconSize:[34,34], iconAnchor:[17,17], popupAnchor:[0,-17]
+      });
+    }
+
+    L.marker(home, {icon: makeIcon('⌂','home')}).addTo(map)
+      .bindPopup('<strong>⌂ Unterkunft</strong><br>Terenowa 22 (Brochów)<br><em>Airbnb · 2 Nächte</em>');
+    L.marker(station, {icon: makeIcon('🚆','station')}).addTo(map)
+      .bindPopup('<strong>🚆 Wrocław Główny</strong><br>Hauptbahnhof<br>An Fr 18:27 · Ab So 14:37');
+
+    const bounds = [home, station];
+    stops.forEach(function(s){
+      L.marker(s.coord, {icon: makeIcon(String(s.n))}).addTo(map)
+        .bindPopup('<strong>'+s.n+'. '+s.name+'</strong><br>'+s.when);
+      bounds.push(s.coord);
+    });
+    map.fitBounds(bounds, {padding:[30,30]});
+
+    // Fix für Leaflet wenn Container erst später sichtbar wird
+    setTimeout(function(){ map.invalidateSize(); }, 300);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMap);
+  } else {
+    initMap();
+  }
+})();
+</script>
+</body>
+</html>
