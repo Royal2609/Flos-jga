@@ -73,6 +73,19 @@
   .alert{background:var(--highlight);border-left:4px solid var(--accent);padding:16px 20px;font-size:14px;margin-top:24px}
   .alert-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--accent-dark);margin-bottom:6px}
 
+  .arrival-list{margin-top:26px;background:white;border:1px solid var(--line);box-shadow:3px 3px 0 var(--line);overflow:hidden}
+  .arrival-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:14px 18px;border-bottom:1px solid var(--line);background:rgba(184,71,42,.08)}
+  .arrival-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--ink)}
+  .arrival-note{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
+  .arrival-table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .arrival-table th,
+  .arrival-table td{padding:8px 10px;border-bottom:1px dashed rgba(26,22,19,.16);text-align:left;vertical-align:top}
+  .arrival-table th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-dark);background:rgba(245,241,232,.7)}
+  .arrival-table tr:last-child td{border-bottom:0}
+  .arrival-table td:nth-child(2),
+  .arrival-table td:nth-child(3){font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft)}
+  .arrival-table .unknown{color:var(--ink-muted)}
+
   /* DAY SECTION */
   .day{margin-bottom:52px}
   .day-header{display:flex;align-items:baseline;gap:20px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
@@ -145,6 +158,10 @@
     .cost-total-box{flex-direction:column;gap:10px;align-items:flex-start}
     .cost-total-box .amt{font-size:34px}
     h1{font-size:clamp(36px,10vw,58px)}
+    .arrival-head{flex-direction:column;gap:4px;align-items:flex-start}
+    .arrival-table{font-size:12.5px}
+    .arrival-table th,
+    .arrival-table td{padding:7px 6px}
   }
 </style>
 </head>
@@ -157,47 +174,74 @@
     <h1>JGA <em>Flo</em><br>Breslau</h1>
     <div class="subtitle">
       <span><strong>29.–31. Mai 2026</strong></span>
-      <span>14 Männer · 3 Tage</span>
-      <span>Anreise aus Dresden</span>
+      <span>13 Männer · 3 Tage</span>
+      <span>Anfahrt nach Gruppen</span>
     </div>
   </header>
 
   <!-- INTRO -->
   <section class="intro">
     <p class="intro-text">
-      Jungs — hier ist der <strong>aktuelle Planungsstand</strong> für Flos JGA in Breslau. Drei Tage mit Zug, Steakhouse, Gokart-Rennen, Brauerei-Führung und einem großen Samstagabend in der Unterkunft: Champions-League-Finale, Billard, Beerpong &amp; Co.
+      Jungs — hier ist der <strong>finale Stand</strong> für Flos JGA in Breslau: drei Tage mit Steakhouse, Barhopping, Gokart-Rennen, Brauerei-Führung, Champions-League-Finale und einem großen Abend in der Unterkunft mit Grillen by Martin, Billard, Beerpong &amp; Co.
     </p>
     <p class="intro-text">
-      <strong>Feedback ist sehr willkommen</strong> — schreibt mir einfach, was ihr anders haben wollt oder wo ihr Ergänzungen habt. Klar ist aber: Bei <strong>14 Leuten werden wir nie alle Meinungen zu 100 % unter einen Hut bringen</strong> — denkt also bitte daran, dass wir irgendwo einen Kompromiss finden müssen. 😉
-    </p>
-    <p class="intro-text">
-      Das Wochenende fällt übrigens mit <strong>Juwenalia</strong> zusammen, dem großen Studentenfestival der Stadt — die Stimmung wird also ohnehin krass. Restaurants und Aktivitäten sollten wir trotzdem (oder gerade deswegen) rechtzeitig reservieren.
+      Das Wochenende fällt übrigens mit <strong>Juwenalia</strong> zusammen, dem großen Studentenfestival der Stadt — die Stimmung wird also ohnehin krass. Die wichtigsten Stationen und Aktivitäten sind reserviert.
     </p>
 
     <div class="facts">
       <div class="fact">
-        <div class="fact-label">🚆 Hinfahrt</div>
-        <div class="fact-value">Fr 29.05. · 14:23 Uhr</div>
-        <div class="fact-sub">Dresden Hbf Gl. 10 → Wrocław Gł. 18:27</div>
-        <div class="fact-sub"><a href="https://www.bahn.de/buchung/start?vbid=a4e57b0b-7a94-4104-9182-deeefccb1a4e" target="_blank" rel="noopener">DB-Verbindung ansehen ↗</a></div>
+        <div class="fact-label">🧭 Anfahrt</div>
+        <div class="fact-value">Zug · Martin · Yannick · Flixbus</div>
+        <div class="fact-sub">Details in der Anfahrtsliste unten.</div>
       </div>
       <div class="fact">
-        <div class="fact-label">🚆 Rückfahrt</div>
-        <div class="fact-value">So 31.05. · 14:37 Uhr</div>
-        <div class="fact-sub">Wrocław Gł. → Dresden Hbf 18:33, Gl. 10</div>
-        <div class="fact-sub"><a href="https://www.bahn.de/buchung/start?vbid=35187504-a3df-4a59-8680-35656da0e259" target="_blank" rel="noopener">DB-Verbindung ansehen ↗</a></div>
+        <div class="fact-label">🥃 Erste Station</div>
+        <div class="fact-value">Fr 29.05. · 19:00 Uhr</div>
+        <div class="fact-sub">Whiskey in the Jar · Rynek 23-24</div>
+        <div class="fact-sub"><a href="http://www.whiskeyinthejar.pl/" target="_blank" rel="noopener">Restaurant öffnen ↗</a></div>
       </div>
       <div class="fact">
         <div class="fact-label">🏠 Unterkunft</div>
         <div class="fact-value">Airbnb · Brochów</div>
-        <div class="fact-sub">Terenowa 22, 52-231 Wrocław</div>
+        <div class="fact-sub">Flo erfährt erst nachts, wo wir pennen.</div>
         <div class="fact-sub"><a href="https://www.airbnb.de/rooms/1608601564567981993" target="_blank" rel="noopener">Airbnb-Listing öffnen ↗</a></div>
       </div>
       <div class="fact">
         <div class="fact-label">🎩 Start in Dresden</div>
         <div class="fact-value">Martin + Robin holen Flo ab</div>
-        <div class="fact-sub">Die Gruppe wächst nach und nach: am Hbf, unterwegs, in Breslau oder per Auto</div>
+        <div class="fact-sub">Die Gruppe wächst nach und nach: unterwegs oder spätestens in Breslau.</div>
       </div>
+    </div>
+
+    <div class="arrival-list">
+      <div class="arrival-head">
+        <div class="arrival-title">Anfahrt &amp; Gepäck</div>
+        <div class="arrival-note">Stand laut Tabelle</div>
+      </div>
+      <table class="arrival-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Anreise</th>
+            <th>Gepäck</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Florian</td><td>Zug</td><td>Martin</td></tr>
+          <tr><td>Robin</td><td>Zug</td><td>Martin</td></tr>
+          <tr><td>Alexander</td><td>Martin</td><td>Martin</td></tr>
+          <tr><td>Martin</td><td>Martin</td><td>Martin</td></tr>
+          <tr><td>Benny Speck</td><td>Flixbus 21:00</td><td>Martin</td></tr>
+          <tr><td>Felix</td><td>Flixbus 21:00</td><td>Martin</td></tr>
+          <tr><td>Yannick</td><td>Yannick</td><td>Yannick</td></tr>
+          <tr><td>Marco</td><td>Yannick</td><td>Yannick</td></tr>
+          <tr><td>Max</td><td>Yannick</td><td>Yannick</td></tr>
+          <tr><td>Konstantin</td><td>Flixbus 20:00</td><td class="unknown">?</td></tr>
+          <tr><td>Eric</td><td>Zug</td><td class="unknown">?</td></tr>
+          <tr><td>Sascha</td><td>Zug Berlin</td><td>Martin</td></tr>
+          <tr><td>Benny Hill</td><td>Zug Berlin</td><td>Martin</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="alert">
@@ -217,35 +261,22 @@
     <div class="timeline">
 
       <div class="slot milestone">
-        <span class="slot-time">13:00</span>
+        <span class="slot-time">vorher</span>
         <div class="slot-name">Flo abholen in Dresden 🎉</div>
         <div class="slot-body">
-          <strong>Martin und Robin</strong> holen Flo ab und fahren mit ihm zum Hbf Dresden. Dort stoßen die ersten aus der Gruppe dazu. Wer es nicht direkt schafft, kommt nach Möglichkeit später dazu: unterwegs, am Bahnhof in Breslau oder mit dem Auto direkt vor Ort.
+          <strong>Martin und Robin</strong> holen Flo ab. Die Anfahrt nach Breslau läuft nach der Liste oben; wer später dazustößt, kommt spätestens zur ersten Station dazu.
           <div class="slot-meta">
-            <span class="tag">flexible Anreise</span>
-            <span>Dresden Hbf · Wrocław Główny · Auto · Unterkunft</span>
+            <span class="tag">Anfahrt nach Gruppen</span>
+            <span>Breslau · erste Station um 19:00 Uhr</span>
           </div>
         </div>
       </div>
 
       <div class="slot milestone">
-        <span class="slot-time">14:23</span>
-        <div class="slot-name">🚆 Zug Dresden Hbf → Wrocław Główny</div>
-        <div class="slot-body">
-          Abfahrt <strong>14:23 Uhr ab Gleis 10</strong> mit RE 5683 + KD 69526, Ankunft in Breslau <strong>18:27 Uhr</strong>. Fahrtzeit ~4 h. Zeit für erste Anreisebiere, Warm-up-Spiele, JGA-Aufgaben für Flo.
-          <div class="slot-meta">
-            <span class="tag">mit D-Ticket: ~70 € p.P.</span>
-            <span class="tag">ohne D-Ticket: ~100 € p.P.</span>
-            <span>Hin + Rück</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="slot">
-        <span class="slot-time">18:30</span>
+        <span class="slot-time">19:00</span>
         <div class="slot-name">🥩 Abendessen · <a href="http://www.whiskeyinthejar.pl/" target="_blank" rel="noopener">Whiskey in the Jar</a></div>
         <div class="slot-body">
-          Direkt vom Bahnhof an den Rynek. <strong>Lavastein-Steaks, Ribs, Burger</strong>, große Portionen und ein würdiger Auftakt fürs Wochenende — da gibt&apos;s für Flo ordentlich was auf den Teller.
+          Erste feste Station in Breslau. <strong>Lavastein-Steaks, Ribs, Burger</strong>, große Portionen und ein würdiger Auftakt fürs Wochenende — da gibt&apos;s für Flo ordentlich was auf den Teller.
           <div class="slot-meta">
             <span class="tag">~35 € p.P.</span>
             <span>Rynek 23-24</span>
@@ -254,13 +285,21 @@
       </div>
 
       <div class="slot">
-        <span class="slot-time">21:30</span>
-        <div class="slot-name">🍻 Bar · <a href="https://www.pwip.com.pl/" target="_blank" rel="noopener">Pijalnia Wódki i Piwa</a></div>
+        <span class="slot-time">nach dem Essen</span>
+        <div class="slot-name">Konstantin, Benny Speck und Felix stoßen dazu</div>
         <div class="slot-body">
-          Lockere, klassisch polnische Bar — günstige Shots &amp; Bier, offen bis 4 Uhr. Stimmung ist garantiert (Juwenalia!). Wer noch mehr Action will: weiter in einen Club in der Nähe (Ruska 51 / Rynek).
+          Nach dem Essen wird die Runde größer: <strong>Konstantin, Benny Speck und Felix</strong> kommen dazu. Ab dann geht&apos;s gemeinsam weiter in die Breslauer Nacht.
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">danach</span>
+        <div class="slot-name">🍻 Barhopping in Breslau</div>
+        <div class="slot-body">
+          Max kennt sich aus ;-). Wir ziehen entspannt los, schauen was Stimmung und Gruppe hergeben, und nehmen die Bars mit, die an dem Abend am besten passen.
           <div class="slot-meta">
             <span class="tag">je nach Durst 😉</span>
-            <span>Ruska 58/59</span>
+            <span>Rynek · Ruska · spontan</span>
           </div>
         </div>
       </div>
@@ -269,7 +308,7 @@
         <span class="slot-time">nachts</span>
         <div class="slot-name">🚕 Rückfahrt zur Unterkunft</div>
         <div class="slot-body">
-          Mit Bolt/Uber (3–4 Autos) oder Nachtbus 245/247. 15–20 Minuten Fahrt nach Brochów.
+          Irgendwann geht es mit Bolt/Uber zur Unterkunft. Für Flo bleibt bis dahin geheim, wo wir pennen.
           <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
         </div>
       </div>
@@ -296,48 +335,77 @@
       </div>
 
       <div class="slot">
-        <span class="slot-time">11:30</span>
-        <div class="slot-name">🚕 Fahrt in die Innenstadt</div>
-        <div class="slot-body">
-          Mit Bolt/Uber in 3–4 Autos direkt zur Kartbahn im Einkaufszentrum Wroclavia.
-          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
-        </div>
-      </div>
-
-      <div class="slot milestone">
         <span class="slot-time">12:30</span>
-        <div class="slot-name">🏁 Event 1 · Gokart · <a href="https://gokartywroclaw.pl/" target="_blank" rel="noopener">Pitlane Wroclavia</a></div>
+        <div class="slot-name">🚕 Uber zur Kartbahn</div>
         <div class="slot-body">
-          <strong>Format für 14 Fahrer:</strong><br>
-          ▸ 2× Qualifying (je 7 Personen)<br>
-          ▸ Die 7 schnellsten fahren das <strong>A-Finale</strong><br>
-          ▸ Die 7 langsamsten fahren das <strong>B-Finale</strong><br>
-          ▸ Abschluss mit <strong>Siegerehrung</strong> 🏆 + Foto für die Ewigkeit
+          Die Uber sind reserviert. Fahrt zur Kartbahn dauert ca. <strong>12 Minuten</strong>.
           <div class="slot-meta">
-            <span class="tag">~40 € p.P.</span>
-            <span>Sucha 1, Poziom -2</span>
+            <span class="tag">reserviert</span>
+            <span class="tag">1,97 € p.P.</span>
           </div>
         </div>
       </div>
 
       <div class="slot milestone">
-        <span class="slot-time">15:30</span>
+        <span class="slot-time">vor 13:30</span>
+        <div class="slot-name">📝 Kart-Registrierung vorher erledigen</div>
+        <div class="slot-body">
+          Bitte vorher alle online registrieren, damit die Anmeldung vor Ort schnell geht:
+          <a href="https://www.gokartywroclaw.pl/rejestracja/" target="_blank" rel="noopener">gokartywroclaw.pl/rejestracja</a>
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">13:30–ca. 15:00</span>
+        <div class="slot-name">🏁 Event 1 · Gokart · <a href="https://gokartywroclaw.pl/" target="_blank" rel="noopener">Pitlane Wroclavia</a></div>
+        <div class="slot-body">
+          <strong>Format für 13 Fahrer:</strong><br>
+          ▸ 2× Qualifying (6/7 Personen)<br>
+          ▸ Die 7 schnellsten fahren das <strong>A-Finale</strong><br>
+          ▸ Die 6 langsameren fahren das <strong>B-Finale</strong><br>
+          ▸ Abschluss mit <strong>Siegerehrung</strong> 🏆 + Foto für die Ewigkeit
+          <div class="slot-meta">
+            <span class="tag">reserviert</span>
+            <span class="tag">40 € p.P.</span>
+            <span>Sucha 1, Poziom -2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot">
+        <span class="slot-time">15:25</span>
+        <div class="slot-name">🚕 Uber zur Brauerei</div>
+        <div class="slot-body">
+          Die Uber zur Brauerei sind reserviert. Fahrt dauert ca. <strong>16 Minuten</strong>.
+          <div class="slot-meta">
+            <span class="tag">reserviert</span>
+            <span class="tag">2,08 € p.P.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slot milestone">
+        <span class="slot-time">16:00–ca. 17:00</span>
         <div class="slot-name">🍺 Event 2 · Biertasting / Brauereiführung · <a href="https://browarstumostow.pl/" target="_blank" rel="noopener">Browar Stu Mostów</a></div>
         <div class="slot-body">
-          Eine der bekanntesten Craft-Brauereien Polens. <strong>Geführte Verkostung im Taproom</strong> — Biere mit Guide erklärt, dazu Snacks. Kurze Taxi-/ÖPNV-Fahrt vom Wroclavia nach Nadodrze.
+          Eine der bekanntesten Craft-Brauereien Polens. <strong>Brauereiführung + Tasting</strong> sind reserviert.
           <div class="slot-meta">
-            <span class="tag">~25 € p.P.</span>
+            <span class="tag">reserviert</span>
+            <span class="tag">11,88 € p.P.</span>
             <span>Jana Długosza 2</span>
           </div>
         </div>
       </div>
 
       <div class="slot">
-        <span class="slot-time">17:00</span>
+        <span class="slot-time">17:20</span>
         <div class="slot-name">🚕 Zurück zur Unterkunft</div>
         <div class="slot-body">
-          Nach dem Tasting zurück nach Brochów. Auf dem Weg ggf. kurz beim Żabka oder Supermarkt stoppen: Getränke, Snacks und irgendwas Solides zum Essen fürs Finale.
-          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
+          Die Uber zurück zur Unterkunft sind reserviert. Fahrt dauert ca. <strong>22 Minuten</strong>.
+          <div class="slot-meta">
+            <span class="tag">reserviert</span>
+            <span class="tag">2,58 € p.P.</span>
+          </div>
         </div>
       </div>
 
@@ -345,7 +413,7 @@
         <span class="slot-time">18:00</span>
         <div class="slot-name">⚽ Champions-League-Finale in der Unterkunft</div>
         <div class="slot-body">
-          Programmpunkt für den Samstagabend: Finale schauen, Getränke kaltstellen, Snacks auf den Tisch und Flo bekommt seinen Platz in der ersten Reihe. Falls es Verlängerung oder Elfmeterschießen gibt, bleibt der Abend komplett entspannt bei uns.
+          <strong>PSG vs. Arsenal</strong> in der Unterkunft. Getränke kaltstellen, Snacks auf den Tisch und Flo bekommt seinen Platz in der ersten Reihe. Falls es Verlängerung oder Elfmeterschießen gibt, bleibt der Abend komplett entspannt bei uns.
           <div class="slot-meta">
             <span class="tag">Anstoß 18:00 Uhr</span>
             <span>TV/Stream vorab klären</span>
@@ -360,8 +428,9 @@
           <p>Nach Abpfiff bleibt der Abend bei uns in Brochów:</p>
           <ul>
             <li><strong>Champions-League-Nachbesprechung</strong> — inklusive Fachsimpelei und schlechten Takes</li>
+            <li><strong>Abendessen:</strong> Grillen by Martin</li>
             <li><strong>Billard</strong> — Turnier-Modus, K.O.-System?</li>
-            <li><strong>Beerpong</strong> 🍻 — <span class="ask">Hat jemand Equipment (Tisch/Becher/Bälle)? Bitte melden!</span></li>
+            <li><strong>Beerpong</strong> 🍻 — Equipment wird von Marco gestellt</li>
             <li><strong>Darts</strong> 🎯 — 501, Cricket, was ihr wollt</li>
             <li>Snacks + Bier + Wodka vom Einkauf</li>
             <li>JGA-Aufgaben für Flo 🎩</li>
@@ -383,43 +452,26 @@
     <div class="timeline">
 
       <div class="slot">
-        <span class="slot-time">10:00</span>
-        <div class="slot-name">🍳 Katerfrühstück in der Unterkunft</div>
+        <span class="slot-time">bis 10:00</span>
+        <div class="slot-name">🧳 Unterkunft verlassen</div>
         <div class="slot-body">
-          Rührei, Brötchen, Nutella, Wurst, Käse — dieselbe Nummer wie Samstag, nur mit mehr Kopfschmerzen.
+          Sachen packen, Küche aufräumen, Müll raus, Schlüssel an den richtigen Ort. Die Unterkunft müssen wir bis <strong>10:00 Uhr</strong> verlassen.
         </div>
       </div>
 
       <div class="slot">
-        <span class="slot-time">11:30</span>
-        <div class="slot-name">🧳 Zusammenpacken &amp; Check-out</div>
+        <span class="slot-time">danach</span>
+        <div class="slot-name">🥐 Brunch in der Stadt <em>(optional)</em></div>
         <div class="slot-body">
-          Küche aufräumen, Müll raus, Schlüssel an den richtigen Ort. Großes Gepäck sammeln wir je nach Transportlösung; Rucksäcke können mit in den Zug.
+          Für alle, die wollen: nochmal entspannt in der Stadt brunchen, Kaffee holen und den Sonntag langsam anlaufen lassen.
         </div>
       </div>
 
       <div class="slot">
-        <span class="slot-time">12:30</span>
-        <div class="slot-name">🚕 Fahrt in die Innenstadt</div>
+        <span class="slot-time">anschließend</span>
+        <div class="slot-name">Heimreise</div>
         <div class="slot-body">
-          Mit Bolt/Uber oder Öffis. Ziel: entspannt Richtung Rynek oder direkt zum Bahnhof, je nachdem wie fit die Gruppe ist.
-          <div class="slot-meta"><span class="tag">~2–4 € p.P.</span></div>
-        </div>
-      </div>
-
-      <div class="slot">
-        <span class="slot-time">13:00</span>
-        <div class="slot-name">🚶‍♂️ Kleine Stadtwanderung <em>(optional)</em></div>
-        <div class="slot-body">
-          Je nach Zustand der Truppe: kurze Runde über den <strong>Rynek</strong>, die Zwerge suchen (Kult in Breslau!), noch ein Kaffee am Marktplatz — oder gleich zum Bahnhof.
-        </div>
-      </div>
-
-      <div class="slot milestone">
-        <span class="slot-time">14:37</span>
-        <div class="slot-name">🚆 Rückfahrt Wrocław Gł. → Dresden Hbf</div>
-        <div class="slot-body">
-          Abfahrt <strong>14:37 Uhr</strong> mit KD 69571 + 20852, Ankunft in Dresden <strong>18:33 Uhr, Gleis 10</strong>. Flo heil und glücklich wieder abliefern. 🎩
+          Danach Heimreise nach eigenem Plan. Flo heil, müde und glücklich wieder abliefern. 🎩
         </div>
       </div>
 
@@ -438,11 +490,10 @@
     </div>
     <div class="legend">
       <div class="legend-item"><span class="legend-dot home">⌂</span><div><strong>Unterkunft</strong><br>Terenowa 22 (Brochów)</div></div>
-      <div class="legend-item"><span class="legend-dot station">🚆</span><div><strong>Wrocław Główny</strong><br>Hauptbahnhof</div></div>
-      <div class="legend-item"><span class="legend-dot">1</span><div><strong>Whiskey in the Jar</strong><br>Fr 18:30 · Steakhouse</div></div>
-      <div class="legend-item"><span class="legend-dot">2</span><div><strong>Pijalnia Wódki i Piwa</strong><br>Fr 21:30 · Bar</div></div>
-      <div class="legend-item"><span class="legend-dot">3</span><div><strong>Pitlane Gokarty</strong><br>Sa 12:30 · Gokart</div></div>
-      <div class="legend-item"><span class="legend-dot">4</span><div><strong>Browar Stu Mostów</strong><br>Sa 15:30 · Brauerei</div></div>
+      <div class="legend-item"><span class="legend-dot">1</span><div><strong>Whiskey in the Jar</strong><br>Fr 19:00 · Steakhouse</div></div>
+      <div class="legend-item"><span class="legend-dot">2</span><div><strong>Barhopping</strong><br>Fr danach · Innenstadt</div></div>
+      <div class="legend-item"><span class="legend-dot">3</span><div><strong>Pitlane Gokarty</strong><br>Sa 13:30 · Gokart</div></div>
+      <div class="legend-item"><span class="legend-dot">4</span><div><strong>Browar Stu Mostów</strong><br>Sa 16:00 · Brauerei</div></div>
     </div>
   </section>
 
@@ -452,10 +503,10 @@
     <div class="costs-sub">pro Person · ungefähr · ohne Getränkekonsum in Bars/Clubs</div>
 
     <div class="cost-category">
-      <div class="cost-category-title">🚆 Anreise &amp; Transport</div>
-      <div class="cost-row"><span class="label">Zug Dresden ⇄ Breslau <span class="hint">(mit D-Ticket)</span></span><span class="val">~70 €</span></div>
-      <div class="cost-row"><span class="label">Zug Dresden ⇄ Breslau <span class="hint">(ohne D-Ticket)</span></span><span class="val">~100 €</span></div>
-      <div class="cost-row"><span class="label">Bolt/Uber &amp; ÖPNV in Breslau <span class="hint">(6× ~3 €)</span></span><span class="val">~18 €</span></div>
+      <div class="cost-category-title">🚕 Transport vor Ort</div>
+      <div class="cost-row"><span class="label">Sa · Uber zur Kartbahn <span class="hint">(reserviert)</span></span><span class="val">1,97 €</span></div>
+      <div class="cost-row"><span class="label">Sa · Uber zur Brauerei <span class="hint">(reserviert)</span></span><span class="val">2,08 €</span></div>
+      <div class="cost-row"><span class="label">Sa · Uber zur Unterkunft <span class="hint">(reserviert)</span></span><span class="val">2,58 €</span></div>
     </div>
 
     <div class="cost-category">
@@ -465,37 +516,34 @@
 
     <div class="cost-category">
       <div class="cost-category-title">🏁 Aktivitäten</div>
-      <div class="cost-row"><span class="label">Gokart Pitlane Wroclavia <span class="hint">(Quali + Finale + Siegerehrung)</span></span><span class="val">~40 €</span></div>
-      <div class="cost-row"><span class="label">Browar Stu Mostów <span class="hint">(Führung + Tasting)</span></span><span class="val">~25 €</span></div>
+      <div class="cost-row"><span class="label">Gokart Pitlane Wroclavia <span class="hint">(reserviert)</span></span><span class="val">40 €</span></div>
+      <div class="cost-row"><span class="label">Browar Stu Mostów <span class="hint">(Führung + Tasting, reserviert)</span></span><span class="val">11,88 €</span></div>
     </div>
 
     <div class="cost-category">
-      <div class="cost-category-title">🍽 Essen auswärts</div>
+      <div class="cost-category-title">🍽 Essen</div>
       <div class="cost-row"><span class="label">Fr · Abendessen Whiskey in the Jar</span><span class="val">~35 €</span></div>
+      <div class="cost-row"><span class="label">Sa · Abendessen: Grillen by Martin</span><span class="val">im Einkauf</span></div>
     </div>
 
     <div class="cost-category">
       <div class="cost-category-title">🛒 Frühstück, Anreisebier, Finalabend (umgelegt)</div>
-      <div class="cost-row"><span class="label">Einkauf: Frühstück Sa + So, Anreisebier, Snacks, Getränke und Essen fürs Finale</span><span class="val">~65 €</span></div>
+      <div class="cost-row"><span class="label">Einkauf: Frühstück Sa + So, Anreisebier, Grillen by Martin, Snacks und Getränke fürs Finale</span><span class="val">~65 €</span></div>
     </div>
 
     <div class="cost-total-box">
-      <div class="lbl">Gesamt pro Person<br><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:rgba(216,155,58,.8);font-style:normal">MIT D-TICKET</span></div>
-      <div class="amt">~373 €</div>
-    </div>
-    <div class="cost-total-box" style="margin-top:10px">
-      <div class="lbl">Gesamt pro Person<br><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:rgba(216,155,58,.8);font-style:normal">OHNE D-TICKET</span></div>
-      <div class="amt">~403 €</div>
+      <div class="lbl">Gesamt pro Person<br><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:rgba(216,155,58,.8);font-style:normal">OHNE INDIVIDUELLE AN-/HEIMREISE</span></div>
+      <div class="amt">~279 €</div>
     </div>
 
     <p class="cost-footnote">
-      <strong>Hinweis:</strong> Flos kompletter Anteil wird von Martin und mir übernommen — jeder andere zahlt nur seinen eigenen Anteil wie oben aufgelistet. Nicht enthalten: Getränke in der Pijalnia und in Clubs (je nach Durst 😉), spontane Zusatzausgaben, Taxi-Ausflüge. Kleinen Puffer von ~30–50 € einplanen.
+      <strong>Hinweis:</strong> Flos kompletter Anteil wird von Martin und mir übernommen — jeder andere zahlt nur seinen eigenen Anteil wie oben aufgelistet. Nicht enthalten: individuelle An- und Heimreise laut Anfahrtsliste, Getränke beim Barhopping (je nach Durst 😉), spontane Zusatzausgaben, zusätzliche Taxi-Fahrten. Kleinen Puffer von ~30–50 € einplanen.
     </p>
   </section>
 
   <footer class="footer">
-    <span>JGA Flo · Breslau · Planungsstand Mai 2026</span>
-    <span>Feedback willkommen ✉</span>
+    <span>JGA Flo · Breslau · Finaler Stand Mai 2026</span>
+    <span>13 Männer · 3 Tage</span>
   </footer>
 
 </div>
@@ -512,12 +560,11 @@
     }
 
     const home = [51.0735, 17.0395];
-    const station = [51.0989, 17.0365];
     const stops = [
-      {n:1, name:"Whiskey in the Jar",   when:"Fr 18:30 · Steakhouse",   coord:[51.109210, 17.032128]},
-      {n:2, name:"Pijalnia Wódki i Piwa",when:"Fr 21:30 · Bar",          coord:[51.110054, 17.027324]},
-      {n:3, name:"Pitlane Gokarty",      when:"Sa 12:30 · Gokart",       coord:[51.096448, 17.034837]},
-      {n:4, name:"Browar Stu Mostów",    when:"Sa 15:30 · Brauerei",     coord:[51.131777, 17.059272]},
+      {n:1, name:"Whiskey in the Jar",   when:"Fr 19:00 · Steakhouse",   coord:[51.109210, 17.032128]},
+      {n:2, name:"Barhopping Innenstadt",when:"Fr danach · mit Max", coord:[51.110054, 17.027324]},
+      {n:3, name:"Pitlane Gokarty",      when:"Sa 13:30 · Gokart",       coord:[51.096448, 17.034837]},
+      {n:4, name:"Browar Stu Mostów",    when:"Sa 16:00 · Brauerei",     coord:[51.131777, 17.059272]},
     ];
 
     const map = L.map('map', {scrollWheelZoom:false}).setView([51.095, 17.035], 12);
@@ -542,10 +589,7 @@
 
     L.marker(home, {icon: makeIcon('⌂','home')}).addTo(map)
       .bindPopup('<strong>⌂ Unterkunft</strong><br>Terenowa 22 (Brochów)<br><em>Airbnb · 2 Nächte · CL-Finale Samstagabend</em>');
-    L.marker(station, {icon: makeIcon('🚆','station')}).addTo(map)
-      .bindPopup('<strong>🚆 Wrocław Główny</strong><br>Hauptbahnhof<br>An Fr 18:27 · Ab So 14:37');
-
-    const bounds = [home, station];
+    const bounds = [home];
     stops.forEach(function(s){
       L.marker(s.coord, {icon: makeIcon(String(s.n))}).addTo(map)
         .bindPopup('<strong>'+s.n+'. '+s.name+'</strong><br>'+s.when);
